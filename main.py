@@ -1,16 +1,46 @@
-# This is a sample Python script.
+import torch
+import torchvision
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from CNN import CNN
+from test import test
+from train import train
 
 
-# Press the green button in the gutter to run the script.
+def init():
+    epochs = 3
+    batch_size = 128
+    learning_rate = 1E-3
+    device = "cpu"
+
+    image_transform = torchvision.transforms.Compose([
+        torchvision.transforms.ToTensor(),
+        torchvision.transforms.Normalize((0.1307,), (0.3081,))
+    ])
+
+    train_dataset = torchvision.datasets.MNIST(
+        './',
+        train=True,
+        download=True,
+        transform=image_transform
+    )
+    test_dataset = torchvision.datasets.MNIST(
+        './',
+        train=False,
+        download=True,
+        transform=image_transform
+    )
+
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
+
+    model = CNN().to(device)
+    optimizer = torch.optim.Adam(model.parameters(), learning_rate)
+    loss_factor = torch.nn.CrossEntropyLoss()
+
+    for epoch in range(epochs):
+        train(model, device, train_loader, optimizer, epoch, loss_factor, batch_size)
+
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    init()
