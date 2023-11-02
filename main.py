@@ -16,10 +16,11 @@ def init():
     model = CNN().to(device)
 
     if os.path.exists(file_path):
-        print('Loading model...')
+        print('Loading model... \n')
         model.load_state_dict(torch.load(file_path, map_location=torch.device('cpu')))
     else:
-        print('Training model...')
+        print('Training model... \n')
+
         image_transform = torchvision.transforms.Compose([
             torchvision.transforms.ToTensor(),
             torchvision.transforms.Normalize((0.1307,), (0.3081,))

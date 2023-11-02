@@ -5,25 +5,33 @@ from torchvision import transforms
 
 
 def test(model):
-    path = './test/'
-    imgs = []
-    files = os.listdir(path)
+    output_file_name = 'result.txt'
+    test_folder_path = './test/'
+    images = []
+    files = os.listdir(test_folder_path)
 
-    for name in files:
-        img = Image.open(path + name).convert('L')
-        img = transforms.ToTensor()(img)
-        imgs.append(img)
+    for file_name in files:
+        image = Image.open(test_folder_path + file_name).convert('L')
+        image = transforms.ToTensor()(image)
 
-    imgs = torch.stack(imgs, 0)
+        images.append(image)
+
+    images = torch.stack(images, 0)
 
     model.eval()
 
     with torch.no_grad():
-        output = model(imgs)
+        output = model(images)
 
     pred = output.argmax(1)
 
-    for i in range(len(files)):
-        print(f'{files[i]}: {pred[i]}')
+    print('Results: \n')
 
-    print(pred)
+    with open(output_file_name, 'w') as file:
+        for i in range(len(files)):
+            content = f'{files[i]}: {pred[i]}'
+
+            print(content)
+            file.write(content + '\n')
+
+        file.close()
