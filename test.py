@@ -1,27 +1,29 @@
+import os
 import torch
-import torch.nn.functional as functional
+from PIL import Image
+from torchvision import transforms
 
 
-def test(model, device, test_loader):
+def test(model):
+    path = './test/'
+    imgs = []
+    files = os.listdir(path)
+
+    for name in files:
+        img = Image.open(path + name).convert('L')
+        img = transforms.ToTensor()(img)
+        imgs.append(img)
+
+    imgs = torch.stack(imgs, 0)
+
     model.eval()
-    test_loss = 0
-    correct = 0
 
     with torch.no_grad():
-        for data, target in test_loader:
-            data, target = data.to(device), target.to(device)
-            output = model(data)
-            test_loss += functional.nll_loss(output, target, reduction='sum').item()
-            pred = output.argmax(dim=1, keepdim=True)
-            correct += pred.eq(target.view_as(pred)).sum().item()
+        output = model(imgs)
 
-    test_loss /= len(test_loader.dataset)
+    pred = output.argmax(1)
 
-    print(
-        '\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-            test_loss,
-            correct,
-            len(test_loader.dataset),
-            100. * correct / len(test_loader.dataset)
-        )
-    )
+    for i in range(len(files)):
+        print(f'{files[i]}: {pred[i]}')
+
+    print(pred)
