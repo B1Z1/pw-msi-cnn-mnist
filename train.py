@@ -16,9 +16,9 @@ def train(model, device, train_loader, optimizer, epoch, loss_factor, batch_size
         optimizer.step()
 
         print(
-            f'EPOCH: {epoch + 1}',
-            f'STEP: {batch_idx + 1:0>{len(str(len(train_loader)))}}/{len(train_loader)}',
-            f'LOSS: {loss.item():.4f}',
-            f'ACC: {acc:.4f}',
-            f'PREDICTION: {prediction[0]}',
+            f'Epoka: {epoch + 1}',
+            f'Krok: {batch_idx + 1:0>{len(str(len(train_loader)))}}/{len(train_loader)}',
+            f'Strata: {loss.item():.4f}',
+            f'Dokladnosc: {acc:.4f}',
+            f'Prognoza: {prediction[0]}',
         )

@@ -17,7 +17,7 @@ def init():
 
     if os.path.exists(file_path):
         print('Loading model... \n')
-        model.load_state_dict(torch.load(file_path, map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load(file_path, map_location=torch.device(device)))
     else:
         print('Training model... \n')
 
@@ -29,7 +29,7 @@ def init():
         train_dataset = torchvision.datasets.MNIST(
             './',
             train=True,
-            download=True,
+            download=False,
             transform=image_transform
         )
 
@@ -39,6 +39,7 @@ def init():
 
         for epoch in range(epochs):
             train(model, device, train_loader, optimizer, epoch, loss_factor, batch_size)
+            test(model)
             torch.save(model.state_dict(), file_path)
 
     test(model)
