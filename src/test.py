@@ -5,8 +5,8 @@ from torchvision import transforms
 
 
 def test(model):
-    output_file_name = 'result.txt'
-    test_folder_path = './test/'
+    output_file_name = '../result.txt'
+    test_folder_path = 'src/test/'
     images = []
     files = os.listdir(test_folder_path)
 

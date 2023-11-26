@@ -40,7 +40,7 @@ def init():
     device = "cpu"
     batch_size = 128
     learning_rate = 1E-3
-    model_path = "model/model.pt"
+    model_path = "src/model/model.pt"
     model = CNN().to(device)
 
     is_from_existing_model = True if input("Czy uzyc istniejacy model? (Tak/Nie): ").lower() == "tak" else False
