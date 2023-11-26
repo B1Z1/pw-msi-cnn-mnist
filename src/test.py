@@ -5,13 +5,13 @@ from torchvision import transforms
 
 
 def test(model):
-    output_file_name = '../result.txt'
-    test_folder_path = 'src/test/'
+    output_file_name = os.path.join(os.getcwd(), 'result.txt')
+    test_folder_path = os.path.join(os.getcwd(), 'test')
     images = []
     files = os.listdir(test_folder_path)
 
     for file_name in files:
-        image = Image.open(test_folder_path + file_name).convert('L')
+        image = Image.open(os.path.join(test_folder_path, file_name)).convert('L')
         image = transforms.ToTensor()(image)
 
         images.append(image)
