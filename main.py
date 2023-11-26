@@ -41,26 +41,29 @@ def init():
     device = "cpu"
     batch_size = 128
     learning_rate = 1E-3
-    model_path = os.path.join(os.getcwd(), "model", "model.pt")
+    model_path = os.path.join(os.getcwd(), "model")
     model = CNN().to(device)
 
     is_from_existing_model = True if input("Czy uzyc istniejacy model? (Tak/Nie): ").lower() == "tak" else False
 
     if is_from_existing_model:
-        load_existing_model(model, model_path, device)
+        model_name = input("Nazwa pliku modelu (znajduje się w model/): ")
+
+        load_existing_model(model, os.path.join(model_path, model_name), device)
     else:
         epochs = int(
             input(
                 "Ilość epok (1-15, w razie podania wartosci wiekszej/mniejszej od proponowanych, bedzie brana maksymalna/minimalna): "
             )
         )
+        model_name = input("Nazwa nowego modelu: ")
 
         if epochs > 15:
             epochs = 15
         elif epochs < 1:
             epochs = 1
 
-        train_model(model, model_path, device, epochs, learning_rate, batch_size)
+        train_model(model, os.path.join(model_path, model_name + ".pt"), device, epochs, learning_rate, batch_size)
 
     test(model)
 
